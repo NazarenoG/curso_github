@@ -1,0 +1,55 @@
+name: Template v2.0
+
+
+
+on:
+
+  push:
+
+    branches: [ "main","develop" ]
+
+  pull_request:
+
+    branches: [ "main","develop" ]
+
+
+
+  # workflow_dispatch:
+
+
+
+jobs:
+
+  Deploy_staging:
+
+    name: Deploy Staging
+
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout the files
+
+        uses: actions/checkout@v2
+
+      - name: Clean EC2
+
+        run: |
+
+              sudo rm -r /var/www/html/
+
+      - name: Deploy to Server
+
+        uses: easingthemes/ssh-deploy@main
+
+        env:
+
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY_STAGING }}
+
+          REMOTE_HOST: ${{ secrets.HOST_DNS_STAGING }}
+
+          REMOTE_USER: ${{ secrets.USERNAME_STAGING }}
+
+          TARGET: ${{ secrets.TARGET_DIR_STAGING }}
