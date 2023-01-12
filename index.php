@@ -10,7 +10,6 @@
   
 <?php echo "Hola desde AWS"?>
 
-
 </body>
 </html>
 
